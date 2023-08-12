@@ -1,17 +1,16 @@
 import tensorflow as tf
-import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
+import tensorflow_datasets as tfds
+import tensorflow_hub as hub
 
-# load dataset
-
+## Load Dataset
 ds, ds_info = tfds.load('cats_vs_dogs', split=['train[:80%]', 'train[80%:]'], as_supervised=True, with_info=True,
                         shuffle_files=True, download=True)
 
-print(ds)
-print(ds_info)
-
 train_ds = ds[0]
 test_ds = ds[1]
+
+print(ds_info.features['label'].names)
 
 
 def preprocess_image(image, label, size=(255, 255)):
@@ -20,7 +19,7 @@ def preprocess_image(image, label, size=(255, 255)):
     return image, label
 
 
-custom_size = (255, 255)
+custom_size = (224, 224)
 train_ds_preprocess = train_ds.map(lambda image, label: preprocess_image(image, label, custom_size))
 test_ds_preprocess = test_ds.map(lambda image, label: preprocess_image(image, label, custom_size))
 
@@ -29,40 +28,42 @@ batch_size = 32
 train_ds_batched = train_ds_preprocess.batch(batch_size)
 test_ds_batched = test_ds_preprocess.batch(batch_size)
 
+for image_batch, labels_batch in train_ds_batched:
+    print(image_batch.shape)
+    print(labels_batch.shape)
+    break
+
 model = tf.keras.Sequential([
-    tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(255, 255, 3)),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
-    tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(64, activation='relu'),
+    hub.KerasLayer("https://tfhub.dev/google/imagenet/mobilenet_v3_small_075_224/classification/5",
+                   trainable=False,input_shape=(224, 224, 3))
+])
+
+feature_batch = model(image_batch)
+print(feature_batch.shape)
+
+# From here, we see that output dense layer has 1001 params
+
+# create final model
+
+final_model = tf.keras.Sequential([
+    hub.KerasLayer("https://tfhub.dev/google/imagenet/mobilenet_v3_small_075_224/classification/5",trainable=False, input_shape=(224, 224, 3)),
     tf.keras.layers.Dense(1)
 ])
 
-optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
+## Train as usual
+
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
 loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
-model.compile(optimizer=optimizer,
+final_model.compile(optimizer=optimizer,
               loss=loss,
               metrics=['accuracy'])
 
-history = model.fit(
+history = final_model.fit(
     train_ds_batched,
-    epochs=10,
+    epochs=1,
     validation_data=test_ds_batched,
 )
 
-model.save("model.keras")
-
-# Plot training history
-plt.plot(history.history['loss'], label='train_loss')
-plt.plot(history.history['val_loss'], label='val_loss')
-plt.plot(history.history['accuracy'], label='train_accuracy')
-plt.plot(history.history['val_accuracy'], label='val_accuracy')
-plt.legend()
-plt.show()
-
-
+final_model.save("mobile_net_cats_dogs.keras")
 
