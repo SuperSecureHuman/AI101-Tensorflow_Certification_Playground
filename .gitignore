@@ -1,2 +1,5 @@
 .idea
 datasets/mnist_csv/*
+*.keras
+wandb/
+logs/
