@@ -2,6 +2,8 @@
 
 ## Covered the following from Handbook
 
+### Basics Part
+
 - [X] Use TensorFlow 2.x.
 - [X] Save and Load Models
 - [X] Build, compile and train machine learning (ML) models using TensorFlow.
@@ -23,10 +25,37 @@
 - [X] Use datasets in different formats, including json and csv.
 - [X] Use datasets from tf.data.datasets.
 
+### CNN Part
+
 - [X] Define Convolutional neural networks with Conv2D and pooling layers.
-- [ ] Build and train models to process real-world image datasets.
+- [X] Build and train models to process real-world image datasets.
 - [X] Understand how to use convolutions to improve your neural network.
 - [X] Use real-world images in different shapes and sizes.
 - [X] Use image augmentation to prevent overfitting.
 - [X] Use ImageDataGenerator.
 - [X] Understand how ImageDataGenerator labels images based on the directory structure.
+
+### NLP Part
+
+- [ ] Build natural language processing systems using TensorFlow.
+- [ ] Prepare text to use in TensorFlow models.
+- [ ] Build models that identify the category of a piece of text using binary categorization
+- [ ] Build models that identify the category of a piece of text using multi-class categorization
+- [ ] Use word embeddings in your TensorFlow model.
+- [ ] Use LSTMs in your model to classify text for either binary or multi-class categorization.
+- [ ] Add RNN and GRU layers to your model.
+- [ ] Use RNNS, LSTMs, GRUs and CNNs in models that work with text.
+- [ ] Train LSTMs on existing text to generate text (such as songs and poetry)
+
+### Time Series
+
+- [ ] Train, tune and use time series, sequence and prediction models.
+- [ ] Train models to predict values for both univariate and multivariate time series.
+- [ ] Prepare data for time series learning.
+- [ ] Understand Mean Absolute Error (MAE) and how it can be used to evaluate accuracy of sequence models.
+- [ ] Use RNNs and CNNs for time series, sequence and forecasting models.
+- [ ] Identify when to use trailing versus centred windows.
+- [ ] Use TensorFlow for forecasting.
+- [ ] Prepare features and labels.
+- [ ] Identify and compensate for sequence bias.
+- [ ] Adjust the learning rate dynamically in time series, sequence and prediction models.
