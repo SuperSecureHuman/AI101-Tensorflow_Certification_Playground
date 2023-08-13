@@ -1,20 +1,23 @@
 import tensorflow as tf
-import matplotlib.pyplot as plt
 import tensorflow_datasets as tfds
 import tensorflow_hub as hub
+import wandb
+from wandb.keras import WandbCallback
+
+# Initialize WandB run
+wandb.init(project="Tensorflow certification practice", group="CNN", save_code=True, name="Transfer Learning Cats vs Dogs")
 
 ## Load Dataset
 
 # Load the 'cats_vs_dogs' dataset, splitting it into train and test sets
-ds, ds_info = tfds.load('cats_vs_dogs', split=['train[:80%]', 'train[80%:]'], as_supervised=True, with_info=True,
+ds, ds_info = tfds.load('cats_vs_dogs',
+                        split=['train[:80%]', 'train[80%:]'],
+                        as_supervised=True, with_info=True,
                         shuffle_files=True, download=True)
 
 # Separate the loaded dataset into train and test sets
 train_ds = ds[0]
 test_ds = ds[1]
-
-# Print the class labels in the dataset
-print(ds_info.features['label'].names)
 
 # Function to preprocess images
 
@@ -37,47 +40,37 @@ batch_size = 32
 train_ds_batched = train_ds_preprocess.batch(batch_size)
 test_ds_batched = test_ds_preprocess.batch(batch_size)
 
-# Print the shape of an image batch and its corresponding label batch
-for image_batch, labels_batch in train_ds_batched:
-    print(image_batch.shape)
-    print(labels_batch.shape)
-    break
-
 # Create a model using a pre-trained MobileNetV3 as feature extractor
 
 model = tf.keras.Sequential([
     hub.KerasLayer("https://tfhub.dev/google/imagenet/mobilenet_v3_small_075_224/classification/5",
-                   trainable=False, input_shape=(224, 224, 3))
-])
-
-# Pass an image batch through the model to get feature vectors
-feature_batch = model(image_batch)
-print(feature_batch.shape)
-
-# Create the final model by adding a dense layer for classification
-
-final_model = tf.keras.Sequential([
-    hub.KerasLayer("https://tfhub.dev/google/imagenet/mobilenet_v3_small_075_224/classification/5", trainable=False, input_shape=(224, 224, 3)),
+                   trainable=False, input_shape=(224, 224, 3)),
     tf.keras.layers.Dense(1)
 ])
 
-## Train the final model
-
-# Define optimizer and loss function
+# Compile the model
 optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001)
 loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 
-# Compile the final model
-final_model.compile(optimizer=optimizer,
+model.compile(optimizer=optimizer,
               loss=loss,
               metrics=['accuracy'])
 
-# Train the final model
-history = final_model.fit(
+# Create a WandB callback
+wandb_callback = WandbCallback(save_model=False)
+
+# Train the model with the WandB callback
+history = model.fit(
     train_ds_batched,
     epochs=10,
     validation_data=test_ds_batched,
+    callbacks=[wandb_callback]
 )
 
-# Save the trained final model
-final_model.save("mobile_net_cats_dogs.keras")
+
+# Log evaluation metrics
+test_loss, test_accuracy = model.evaluate(test_ds_batched)
+wandb.log({"test_loss": test_loss, "test_accuracy": test_accuracy})
+
+# Close the WandB run
+wandb.finish()

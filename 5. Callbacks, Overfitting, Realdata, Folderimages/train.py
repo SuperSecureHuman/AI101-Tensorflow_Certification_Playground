@@ -8,12 +8,13 @@ import wandb
 from wandb.keras import WandbCallback
 
 # Initialize wandb
-wandb.init(project="flowers-classification")
+wandb.init(project="Tensorflow certification practice", group="CNN Everything",
+           save_code=True, name="ImageDatagen, RealData, Callbacks")
 
 # Constants
 DATASET_DIR = "/home/venom/Downloads/flowers"
-BATCH_SIZE = 5
-EPOCHS = 100
+BATCH_SIZE = 32
+EPOCHS = 15
 IMAGE_SIZE = (150, 150)
 
 # ImageDataGenerator with augmentation
@@ -72,7 +73,7 @@ def scheduler(epoch, lr):
 
 callbacks = [
     LearningRateScheduler(scheduler, verbose=1),
-    WandbCallback(),
+    WandbCallback(save_model=False),
     TensorBoard(log_dir='./logs'),
     ModelCheckpoint(filepath='model_checkpoint.h5', monitor='val_accuracy', save_best_only=True)
 ]
@@ -84,3 +85,6 @@ history = model.fit(
     epochs=EPOCHS,
     callbacks=callbacks
 )
+
+# Close the WandB run
+wandb.finish()

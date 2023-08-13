@@ -1,5 +1,10 @@
 # TF Cert trials
 
+Weights and Biases project of this learning
+
+<https://wandb.ai/supersecurehuman/Tensorflow%20Certification%20practice/table>
+
+
 ## Covered the following from Handbook
 
 ### Basics Part
@@ -37,15 +42,15 @@
 
 ### NLP Part
 
-- [ ] Build natural language processing systems using TensorFlow.
-- [ ] Prepare text to use in TensorFlow models.
-- [ ] Build models that identify the category of a piece of text using binary categorization
-- [ ] Build models that identify the category of a piece of text using multi-class categorization
-- [ ] Use word embeddings in your TensorFlow model.
-- [ ] Use LSTMs in your model to classify text for either binary or multi-class categorization.
-- [ ] Add RNN and GRU layers to your model.
-- [ ] Use RNNS, LSTMs, GRUs and CNNs in models that work with text.
-- [ ] Train LSTMs on existing text to generate text (such as songs and poetry)
+- [X] Build natural language processing systems using TensorFlow.
+- [X] Prepare text to use in TensorFlow models.
+- [X] Build models that identify the category of a piece of text using binary categorization
+- [X] Build models that identify the category of a piece of text using multi-class categorization
+- [X] Use word embeddings in your TensorFlow model.
+- [X] Use LSTMs in your model to classify text for either binary or multi-class categorization.
+- [X] Add RNN and GRU layers to your model.
+- [X] Use RNNS, LSTMs, GRUs and CNNs in models that work with text.
+- [X] Train LSTMs on existing text to generate text (such as songs and poetry)
 
 ### Time Series
 
