@@ -54,13 +54,13 @@ Weights and Biases project of this learning
 
 ### Time Series
 
-- [ ] Train, tune and use time series, sequence and prediction models.
-- [ ] Train models to predict values for both univariate and multivariate time series.
-- [ ] Prepare data for time series learning.
-- [ ] Understand Mean Absolute Error (MAE) and how it can be used to evaluate accuracy of sequence models.
-- [ ] Use RNNs and CNNs for time series, sequence and forecasting models.
-- [ ] Identify when to use trailing versus centred windows.
-- [ ] Use TensorFlow for forecasting.
-- [ ] Prepare features and labels.
-- [ ] Identify and compensate for sequence bias.
-- [ ] Adjust the learning rate dynamically in time series, sequence and prediction models.
+- [X] Train, tune and use time series, sequence and prediction models.
+- [X] Train models to predict values for both uni-variate and multivariate time series.
+- [X] Prepare data for time series learning.
+- [X] Understand Mean Absolute Error (MAE) and how it can be used to evaluate accuracy of sequence models.
+- [X] Use RNNs and CNNs for time series, sequence and forecasting models.
+- [X] Identify when to use trailing versus centred windows.
+- [X] Use TensorFlow for forecasting.
+- [X] Prepare features and labels.
+- [X] Identify and compensate for sequence bias.
+- [X] Adjust the learning rate dynamically in time series, sequence and prediction models.
